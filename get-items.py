@@ -19,7 +19,7 @@ class AmazonItem:
     highest_price: float
     lowest_price: float
 
-amazon = AmazonApi(os.environ['KEY'], os.environ['SECRET'], os.environ['TAG'], os.environ['COUNTRY'])
+amazon = AmazonApi(os.environ['KEY'], os.environ['SECRET'], os.environ['TAG'], os.environ['COUNTRY'], throttling=5)
 
 #item_ids = ['B08P6ZSXWZ']
 

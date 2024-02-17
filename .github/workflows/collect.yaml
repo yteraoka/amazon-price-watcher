@@ -1,0 +1,45 @@
+name: collect data
+
+on:
+  pull_request:
+  schedule:
+    - cron: '10 0/3 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - run: pip install -r requirements.txt
+
+      - name: get item price
+        id: get-item-price
+        run: |
+          set -o pipefail
+          output_file=$(date --utc +data/%Y/%m/%d/%Y%m%d-%H%M%S).json
+          install -d $(dirname ${output_file})
+          python get-items.py item-list.csv | tee ${output_file}
+          echo "output_file=${output_file}" >> $GITHUB_OUTPUT
+        env:
+          KEY: ${{ secrets.AMAZON_PA_API_KEY }}
+          SECRET: ${{ secrets.AMAZON_PA_API_SECRET }}
+          TAG: ${{ secrets.AMAZON_PA_API_TAG }}
+          COUNTRY: ${{ vars.AMAZON_PA_API_COUNTRY }}
+
+      - name: puth new data
+        run: |
+          git add data
+          git commit -m "add ${OUTPUT_FILE}"
+          git push
+        env:
+          OUTPUT_FILE: ${{ steps.get-item-price.outputs.output_file }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ github.event_name == 'schedule' }}

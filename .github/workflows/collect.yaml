@@ -36,10 +36,13 @@ jobs:
 
       - name: puth new data
         run: |
+          git config user.email "${GIT_EMAIL}"
+          git config user.name "GitHub Actions"
           git add data
           git commit -m "add ${OUTPUT_FILE}"
           git push
         env:
           OUTPUT_FILE: ${{ steps.get-item-price.outputs.output_file }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
         if: ${{ github.event_name == 'schedule' }}

@@ -36,3 +36,5 @@ SELECT MAX(highest) AS price
   <ReferenceLine data={lowest_price} y=price color=blue label="Lowest" />
   <ReferenceLine data={highest_price} y=price color=red label="Highest" />
 </LineChart>
+
+<img src="{fmt(item[0].image_url)}">

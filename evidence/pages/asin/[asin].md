@@ -1,13 +1,16 @@
 # {params.asin}
 
-```sql item_name
+```sql item
 SELECT name
+     , url
+     , image_url
   FROM local.prices
  WHERE asin = '${params.asin}'
+ ORDER BY timestamp DESC
  LIMIT 1
 ```
 
-[<Value data={item_name} column=name row=0 />](https://www.amazon.co.jp/dp/{params.asin}/)
+[<Value data={item} column=name row=0 />](https://www.amazon.co.jp/dp/{params.asin}?tag=ytera-22&linkCode=ogi&th=1&psc=1)
 
 ```sql prices
 SELECT timestamp

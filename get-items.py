@@ -15,7 +15,7 @@ class AmazonItem:
     merchant_name: str
     currency: str
     price: float
-    savings_ammount: float
+    savings_amount: float
     highest_price: float
     lowest_price: float
 

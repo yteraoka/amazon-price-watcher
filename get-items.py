@@ -18,6 +18,9 @@ class AmazonItem:
     savings_amount: float
     highest_price: float
     lowest_price: float
+    url: str
+    image_url_large: str
+    image_url_medium: str
 
 amazon = AmazonApi(os.environ['KEY'], os.environ['SECRET'], os.environ['TAG'], os.environ['COUNTRY'], throttling=5)
 
@@ -41,7 +44,10 @@ def main():
             item.offers.listings[0].price.amount,
             item.offers.listings[0].price.savings.amount if item.offers.listings[0].price.savings is not None else 0.0,
             item.offers.summaries[0].highest_price.amount,
-            item.offers.summaries[0].lowest_price.amount
+            item.offers.summaries[0].lowest_price.amount,
+            item.detail_page_url,
+            item.images.primary.large.url,
+            item.images.primary.medium.url
             )
         print(json.dumps(asdict(i), ensure_ascii=False))
 

@@ -1,4 +1,4 @@
-name: collect data
+name: collect data and deploy
 
 on:
   pull_request:
@@ -7,9 +7,15 @@ on:
 
 permissions:
   contents: write
+  pages: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +40,7 @@ jobs:
           TAG: ${{ secrets.AMAZON_PA_API_TAG }}
           COUNTRY: ${{ vars.AMAZON_PA_API_COUNTRY }}
 
-      - name: puth new data
+      - name: push new data
         run: |
           git config user.email "${GIT_EMAIL}"
           git config user.name "GitHub Actions"
@@ -46,3 +52,40 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
         if: ${{ github.event_name == 'schedule' }}
+
+      - name: json2csv
+        run: |
+          bash json2csv.sh
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .tool-versions
+
+      - name: npm ci
+        working-directory: evidence
+
+      - run: npm run sources
+        working-directory: evidence
+
+      - run: npm run build
+        working-directory: evidence
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./evidence/build
+        if: ${{ github.event_name == 'schedule' }}
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 1800000

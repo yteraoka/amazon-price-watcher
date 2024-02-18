@@ -15,26 +15,21 @@ SELECT name
 ```sql prices
 SELECT timestamp
      , price
+     , lowest
+     , highest
   FROM local.prices
  WHERE asin = '${params.asin}'
  ORDER BY timestamp
 ```
 
-```sql lowest_price
-SELECT MIN(lowest) AS price
-  FROM local.prices
- WHERE asin = '${params.asin}'
-```
+<LineChart
+  data={prices}
+  x=timestamp
+  y={["price","lowest","highest"]}
+  yFmt=JPY0
+  step=true
+/>
 
-```sql highest_price
-SELECT MAX(highest) AS price
-  FROM local.prices
- WHERE asin = '${params.asin}'
-```
-
-<LineChart data={prices} x=timestamp y=price yFmt=JPY0>
-  <ReferenceLine data={lowest_price} y=price color=blue label="Lowest" />
-  <ReferenceLine data={highest_price} y=price color=red label="Highest" />
-</LineChart>
+lowest には中古の価格も含まれることがある
 
 <img src="{fmt(item[0].image_url)}">

@@ -88,6 +88,9 @@ jobs:
       - run: npm run build
         working-directory: evidence
 
+      - run: chmod -R go+r build
+        working-directory: evidence
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -107,4 +110,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          timeout: 1800000
+          timeout: 600000

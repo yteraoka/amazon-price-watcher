@@ -2,6 +2,15 @@ name: collect data and deploy
 
 on:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      disable_collect:
+        description: 'データ取得しないで evidence の更新だけを行う'
+        type: choice
+        default: 'true'
+        options:
+          - 'true'
+          - 'false'
   schedule:
     - cron: '10 0/3 * * *'
 
@@ -29,6 +38,9 @@ jobs:
       - name: get item price
         id: get-item-price
         run: |
+          if [ "${DISABLE_COLLECT}" = "true" ]; then
+            exit 0
+          fi
           set -o pipefail
           output_file=$(date --utc +data/%Y/%m/%d/%Y%m%d-%H%M%S).json
           install -d $(dirname ${output_file})
@@ -39,6 +51,7 @@ jobs:
           SECRET: ${{ secrets.AMAZON_PA_API_SECRET }}
           TAG: ${{ secrets.AMAZON_PA_API_TAG }}
           COUNTRY: ${{ vars.AMAZON_PA_API_COUNTRY }}
+          DISABLE_COLLECT: ${{ inputs.disable_collect }}
 
       - name: push new data
         run: |
@@ -51,7 +64,7 @@ jobs:
           OUTPUT_FILE: ${{ steps.get-item-price.outputs.output_file }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
-        if: ${{ github.event_name == 'schedule' }}
+        if: github.event_name != 'pull_request'
 
       - name: json2csv
         run: |
@@ -74,11 +87,11 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./evidence/build
-        if: ${{ github.event_name == 'schedule' }}
+        if: github.event_name != 'pull_request'
 
   # Deployment job
   deploy:
-    if: ${{ github.event_name == 'schedule' }}
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

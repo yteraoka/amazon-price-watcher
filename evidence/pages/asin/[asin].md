@@ -22,6 +22,13 @@ SELECT timestamp
  ORDER BY timestamp
 ```
 
+<BigValue
+  data={prices}
+  value='price'
+  sparkline='date'
+  fmt='JPY'
+/>
+
 <LineChart
   data={prices}
   x=timestamp

@@ -45,6 +45,8 @@ jobs:
           set -o pipefail
           output_file=$(date --utc +data/%Y/%m/%d/%Y%m%d-%H%M%S).json
           install -d $(dirname ${output_file})
+          echo '"asin","category","name"' > item-list.csv
+          cat evidence/sources/local/items.csv >> item-list.csv
           python get-items.py item-list.csv | tee ${output_file}
           echo "output_file=${output_file}" >> $GITHUB_OUTPUT
         env:

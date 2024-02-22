@@ -35,7 +35,11 @@ def getItem(asin):
     if res.status_code != 200:
         raise Exception("Unexpected status code {}, url {}".format(res.status_code, url))
     bs = BeautifulSoup(res.text, features="html.parser")
-    title = bs.find(id='title').text.strip()
+    title_id = bs.find(id='title')
+    if title_id is None:
+        print('No title', file=sys.stderr)
+        print(res.text, file=sys.stderr)
+    title = title_id.text.strip()
     image_url = bs.find('img', id='landingImage').attrs['src']
     div = bs.find(id="corePrice_feature_div")
     if div is None or div.find('span', class_='a-price-whole') is None:

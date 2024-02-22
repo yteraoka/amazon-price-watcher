@@ -42,6 +42,7 @@ jobs:
           if [ "${DISABLE_COLLECT}" = "true" ]; then
             exit 0
           fi
+          exit 0
           set -o pipefail
           output_file=$(date --utc +data/%Y/%m/%d/%Y%m%d-%H%M%S).json
           install -d $(dirname ${output_file})

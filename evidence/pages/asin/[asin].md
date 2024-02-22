@@ -19,12 +19,16 @@ SELECT timestamp
  ORDER BY timestamp
 ```
 
-<BigValue
-  data={prices}
-  value='price'
-  sparkline='date'
-  fmt='JPY'
-/>
+```sql latest
+SELECT timestamp
+     , price
+  FROM local.prices
+ WHERE asin = '${params.asin}'
+ ORDER BY timestamp DESC
+  LIMIT 1
+```
+
+<Value data={latest} fmt='JPY' column='price' /> (at <Value data={latest} column='timestamp' fmt='yyyy-mm-dd H:MM AM/PM' />)
 
 <LineChart
   data={prices}
@@ -35,3 +39,17 @@ SELECT timestamp
 />
 
 <img src="{fmt(item[0].image_url)}">
+
+---
+
+```sql items
+SELECT column0 AS asin
+     , column2 AS name
+     , '/asin/' || column0 || '/' AS link
+  FROM local.items
+ WHERE column1 = (SELECT column1 FROM local.items WHERE column0 = '${params.asin}')
+--   AND column0 <> '${params.asin}'
+ ORDER BY column2
+```
+
+<DataTable data={items} rows=all link=link />

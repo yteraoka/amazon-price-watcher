@@ -34,7 +34,7 @@ jobs:
         with:
           python-version-file: .python-version
 
-      - run: pip install -r requirements.txt
+      - run: pip install -r bs/requirements.txt
 
       - name: get item price
         id: get-item-price
@@ -47,14 +47,15 @@ jobs:
           install -d $(dirname ${output_file})
           echo '"asin","category","name"' > item-list.csv
           cat evidence/sources/local/items.csv >> item-list.csv
-          python get-items.py item-list.csv | tee ${output_file}
+          #python get-items.py item-list.csv | tee ${output_file}
+          python bs/price.py item-list.csv | tee ${output_file}
           echo "output_file=${output_file}" >> $GITHUB_OUTPUT
-        env:
-          KEY: ${{ secrets.AMAZON_PA_API_KEY }}
-          SECRET: ${{ secrets.AMAZON_PA_API_SECRET }}
-          TAG: ${{ secrets.AMAZON_PA_API_TAG }}
-          COUNTRY: ${{ vars.AMAZON_PA_API_COUNTRY }}
-          DISABLE_COLLECT: ${{ inputs.disable_collect }}
+        #env:
+        #  KEY: ${{ secrets.AMAZON_PA_API_KEY }}
+        #  SECRET: ${{ secrets.AMAZON_PA_API_SECRET }}
+        #  TAG: ${{ secrets.AMAZON_PA_API_TAG }}
+        #  COUNTRY: ${{ vars.AMAZON_PA_API_COUNTRY }}
+        #  DISABLE_COLLECT: ${{ inputs.disable_collect }}
 
       - name: push new data
         run: |

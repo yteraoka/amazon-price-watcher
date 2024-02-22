@@ -2,7 +2,6 @@
 
 ```sql item
 SELECT name
-     , url
      , image_url
   FROM local.prices
  WHERE asin = '${params.asin}'
@@ -15,8 +14,6 @@ SELECT name
 ```sql prices
 SELECT timestamp
      , price
-     , lowest
-     , highest
   FROM local.prices
  WHERE asin = '${params.asin}'
  ORDER BY timestamp
@@ -32,11 +29,9 @@ SELECT timestamp
 <LineChart
   data={prices}
   x=timestamp
-  y={["price","lowest","highest"]}
+  y=price
   yFmt=JPY0
   step=true
 />
-
-lowest には中古の価格も含まれることがある
 
 <img src="{fmt(item[0].image_url)}">

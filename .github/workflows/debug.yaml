@@ -5,7 +5,7 @@ on:
 
 jobs:
   debug:
-    runs-no: self-hosted
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
 

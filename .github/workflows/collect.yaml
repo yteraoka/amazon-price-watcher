@@ -26,7 +26,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
 
@@ -42,7 +42,6 @@ jobs:
           if [ "${DISABLE_COLLECT}" = "true" ]; then
             exit 0
           fi
-          exit 0
           set -o pipefail
           output_file=$(date --utc +data/%Y/%m/%d/%Y%m%d-%H%M%S).json
           install -d $(dirname ${output_file})
@@ -58,22 +57,22 @@ jobs:
         #  COUNTRY: ${{ vars.AMAZON_PA_API_COUNTRY }}
         #  DISABLE_COLLECT: ${{ inputs.disable_collect }}
 
-      #- name: push new data
-      #  run: |
-      #    if [ "${DISABLE_COLLECT}" = "true" ]; then
-      #      exit 0
-      #    fi
-      #    git config user.email "${GIT_EMAIL}"
-      #    git config user.name "GitHub Actions"
-      #    git add data
-      #    git commit -m "add ${OUTPUT_FILE}"
-      #    git push
-      #  env:
-      #    OUTPUT_FILE: ${{ steps.get-item-price.outputs.output_file }}
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #    GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
-      #    DISABLE_COLLECT: ${{ inputs.disable_collect }}
-      #  if: github.event_name != 'pull_request'
+      - name: push new data
+        run: |
+          if [ "${DISABLE_COLLECT}" = "true" ]; then
+            exit 0
+          fi
+          git config user.email "${GIT_EMAIL}"
+          git config user.name "GitHub Actions"
+          git add data
+          git commit -m "add ${OUTPUT_FILE}"
+          git push
+        env:
+          OUTPUT_FILE: ${{ steps.get-item-price.outputs.output_file }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
+          DISABLE_COLLECT: ${{ inputs.disable_collect }}
+        if: github.event_name != 'pull_request'
 
       - name: json2csv
         run: |

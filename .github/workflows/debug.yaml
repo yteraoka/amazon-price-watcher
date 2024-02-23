@@ -27,6 +27,9 @@ jobs:
         with:
           python-version: '3.12.2'
 
+      - name: check /opt
+        run: find /opt -ls
+
       - name: install python .python-version
         uses: actions/setup-python@v5
         with:

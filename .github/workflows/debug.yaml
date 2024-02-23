@@ -19,6 +19,8 @@ jobs:
           ls -l /opt
           echo "[env]"
           env
+          echo "[uname]"
+          uname -a
 
       - uses: actions/setup-python@v5
         with:

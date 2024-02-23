@@ -38,7 +38,7 @@ SELECT timestamp
   step=true
 />
 
-<img src="{fmt(item[0].image_url)}">
+<img src="{fmt(item[0].image_url)}" alt="item image">
 
 ---
 

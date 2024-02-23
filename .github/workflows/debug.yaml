@@ -22,6 +22,12 @@ jobs:
           echo "[uname]"
           uname -a
 
-      - uses: actions/setup-python@v5
+      - name: install python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: install python .python-version
+        uses: actions/setup-python@v5
         with:
           python-version-file: .python-version

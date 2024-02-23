@@ -40,7 +40,15 @@ def getItem(asin):
         print('No title', file=sys.stderr)
         print(res.text, file=sys.stderr)
     title = title_id.text.strip()
-    image_url = bs.find('img', id='landingImage').attrs['src']
+    landing_image = bs.find('img', id='landingImage')
+    if landing_image is not None:
+        image_url = landing_image.attrs['src']
+    else:
+        unrolled_image = bs.find('div', id='unrolledImgNo0')
+        if unrolled_image is not None:
+            img = unrolled_image.find('img')
+            if img is not None:
+                image_url = img.attr['src']
     div = bs.find(id="corePrice_feature_div")
     if div is None or div.find('span', class_='a-price-whole') is None:
         div = bs.find(id='corePriceDisplay_desktop_feature_div')

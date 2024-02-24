@@ -1,3 +1,5 @@
+# This file was automatically generated
 name: local
 type: csv
-options: {}
+options:
+  options: header=true

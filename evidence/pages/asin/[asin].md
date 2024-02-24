@@ -42,14 +42,29 @@ SELECT timestamp
 
 ---
 
-```sql items
-SELECT column0 AS asin
-     , column2 AS name
-     , '/asin/' || column0 || '/' AS link
+```sql category
+SELECT category
   FROM local.items
- WHERE column1 = (SELECT column1 FROM local.items WHERE column0 = '${params.asin}')
---   AND column0 <> '${params.asin}'
- ORDER BY column2
+ WHERE asin = '${params.asin}'
+ LIMIT 1
+```
+
+## <Value data={category} />
+
+```sql items
+SELECT asin
+     , name
+     , '/asin/' || asin || '/' AS link
+  FROM local.items
+ WHERE category = (SELECT category FROM local.items WHERE asin = '${params.asin}')
+--   AND asin <> '${params.asin}'
+ ORDER BY name
 ```
 
 <DataTable data={items} rows=all link=link />
+
+---
+
+## Categories
+
+{@partial "categories.md"}

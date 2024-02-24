@@ -48,7 +48,7 @@ def getItem(asin):
         if unrolled_image is not None:
             img = unrolled_image.find('img')
             if img is not None:
-                image_url = img.attr['src']
+                image_url = img.attrs['src']
     div = bs.find(id="corePrice_feature_div")
     if div is None or div.find('span', class_='a-price-whole') is None:
         div = bs.find(id='corePriceDisplay_desktop_feature_div')

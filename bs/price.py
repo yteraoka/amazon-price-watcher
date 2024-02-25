@@ -102,7 +102,7 @@ def main():
     with open(sys.argv[1]) as f:
         reader = csv.DictReader(f)
         for row in reader:
-            if raw['enabled'] == "true":
+            if row['enabled'] == "true":
                 item_ids.append(row['asin'])
 
     for asin in item_ids:

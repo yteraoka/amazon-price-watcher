@@ -9,7 +9,8 @@ SELECT name
  LIMIT 1
 ```
 
-[<Value data={item} column=name row=0 />](https://www.amazon.co.jp/dp/{params.asin}?tag=ytera-22&linkCode=ogi&th=1&psc=1)
+<a href="https://www.amazon.co.jp/dp/{params.asin}?tag=ytera-22&linkCode=ogi&th=1&psc=1" target="_blank" rel="noreferrer sponsored"><Value data={item} column=name row=0 /></a>
+
 
 ```sql prices
 SELECT timestamp
@@ -28,14 +29,17 @@ SELECT timestamp
   LIMIT 1
 ```
 
-<Value data={latest} fmt='JPY' column='price' /> (at <Value data={latest} column='timestamp' fmt='yyyy-mm-dd H:MM AM/PM' />)
+## <Value data={latest} fmt='JPY' column='price' /> (at <Value data={latest} column='timestamp' fmt='yyyy-mm-dd H:MM AM/PM' /> UTC)
 
 <LineChart
   data={prices}
   x=timestamp
   y=price
   yFmt=JPY0
-  step=true
+  step=false
+  markers=true
+  markerShape=circle
+  markerSize=6
 />
 
 <img src="{fmt(item[0].image_url)}" alt="item image">

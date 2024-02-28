@@ -1,0 +1,28 @@
+name: notify
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - data/**
+      - diff.py
+      - .github/workflows/notify.yaml
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - run: pip install -r bs/requirements.txt
+
+      - name: notify
+        run: ls data/*/*/*/* | tail -n 2 | xargs python diff.py
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+

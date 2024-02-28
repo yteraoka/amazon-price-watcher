@@ -1,0 +1,36 @@
+name: debug
+
+on:
+  pull_request:
+
+jobs:
+  debug:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: debug
+        run: |
+          echo "[ls -l]"
+          ls -l
+          echo "[pwd]"
+          pwd
+          echo "ls -l /opt"
+          ls -l /opt
+          echo "[env]"
+          env
+          echo "[uname]"
+          uname -a
+
+      - name: install python 3.12.2
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.2'
+
+      - name: check /opt
+        run: find /opt -ls
+
+      - name: install python .python-version
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version

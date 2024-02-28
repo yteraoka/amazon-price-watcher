@@ -1,16 +1,37 @@
 # {params.category}
 
-```sql items
-SELECT asin
-     , name
-     , '/asin/' || asin || '/' AS link
-  FROM local.items
- WHERE category = '${params.category}'
- ORDER BY name
+```sql items_with_price
+WITH
+latest AS (
+  SELECT max(timestamp) AS timestamp
+       , asin
+    FROM local.prices
+   GROUP BY asin
+),
+latest_prices AS (
+  SELECT prices.asin
+       , prices.name
+       , prices.price
+    FROM local.prices prices
+         JOIN
+         latest
+         ON prices.timestamp = latest.timestamp
+)
+SELECT items.asin
+     , latest_prices.price
+     , items.name
+     , '/asin/' || items.asin || '/' AS link
+  FROM local.items items
+       JOIN
+       latest_prices
+       ON items.asin = latest_prices.asin
+ WHERE items.category = '${params.category}'
+ORDER BY items.name
 ```
 
-<DataTable data={items} search=true link=link rows=50>
+<DataTable data={items_with_price} search=true link=link rows=50>
   <Column id=asin />
+  <Column id=price fmt=num0 />
   <Column id=name />
 </DataTable>
 

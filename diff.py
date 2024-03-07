@@ -27,21 +27,25 @@ def read_file(path):
     return data
 
 
-def diff(latest, previous):
+def compare(latest, previous):
     if latest['price'] < previous['price']:
+        diff = previous['price'] - latest['price']
+        percent = diff / previous['price']
         # 値下がり
         send_message(latest['asin'],
                      latest['name'],
                      latest['price'],
                      previous['price'],
-                     "値下がりしました")
+                     f"{percent:.2%} 値下がりしました")
     elif latest['price'] > previous['price']:
         # 値上がり
+        diff = latest['price'] - previous['price']
+        percent = diff / previous['price']
         send_message(latest['asin'],
                      latest['name'],
                      latest['price'],
                      previous['price'],
-                     "値上がりしました")
+                     f"{percent:.2%} 値上がりしました")
 
 def send_message(asin, item_name, latest_price, previous_price, title):
     body = {}
@@ -71,6 +75,6 @@ def main():
 
     for asin in latest:
         if asin in previous:
-            diff(latest[asin], previous[asin])
+            compare(latest[asin], previous[asin])
 
 main()

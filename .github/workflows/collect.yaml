@@ -11,8 +11,8 @@ on:
         options:
           - 'true'
           - 'false'
-#  schedule:
-#    - cron: '10 0/3 * * *'
+  schedule:
+    - cron: '10 0/3 * * *'
 
 permissions:
   contents: write
@@ -26,7 +26,8 @@ concurrency:
 
 jobs:
   build:
-    runs-on: self-hosted
+    #runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 

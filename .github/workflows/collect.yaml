@@ -48,7 +48,9 @@ jobs:
           #python get-items.py evidence/sources/local/items.csv | tee ${output_file}
           python bs/price.py evidence/sources/local/items.csv | tee ${output_file}
           echo "output_file=${output_file}" >> $GITHUB_OUTPUT
-        #env:
+        env:
+          HTTP_PROXY: ${{ secrets.HTTP_PROXY }}
+          HTTPS_PROXY: ${{ secrets.HTTPS_PROXY }}
         #  KEY: ${{ secrets.AMAZON_PA_API_KEY }}
         #  SECRET: ${{ secrets.AMAZON_PA_API_SECRET }}
         #  TAG: ${{ secrets.AMAZON_PA_API_TAG }}

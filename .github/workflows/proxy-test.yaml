@@ -1,0 +1,15 @@
+name: proxy-test
+
+on:
+  push:
+    pull_request:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -fs -U github-actions:${PROXY_PASSWORD} -x ${PROXY_SERVER} https://httpbin.org/ip
+        env:
+          PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
+          PROXY_SERVER: ${{ secrets.PROXY_SERVER }}

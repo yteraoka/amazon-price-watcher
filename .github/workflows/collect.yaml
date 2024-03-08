@@ -75,6 +75,12 @@ jobs:
           DISABLE_COLLECT: ${{ inputs.disable_collect }}
         if: github.event_name != 'pull_request'
 
+      - name: notify
+        run: |
+          ls data/*/*/*/* | tail -n 2 | xargs python diff.py
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
       - name: json2csv
         run: |
           bash json2csv.sh

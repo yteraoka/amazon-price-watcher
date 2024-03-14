@@ -5,6 +5,6 @@
     export let data;
 </script>
 
-<EvidenceDefaultLayout title="My Title" fullWidth=true hideSidebar=true githubRepo="https://github.com/yteraoka/amazon-price-watcher" {data}>
+<EvidenceDefaultLayout fullWidth=true hideSidebar=true githubRepo="https://github.com/yteraoka/amazon-price-watcher" {data}>
     <slot slot="content" />
 </EvidenceDefaultLayout>

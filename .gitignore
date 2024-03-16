@@ -1,2 +1,3 @@
 .venv
 .envrc
+playwright/work/*.html

@@ -35,7 +35,9 @@ jobs:
         with:
           python-version-file: .python-version
 
-      - run: pip install -r bs/requirements.txt
+      - run: pip install -r playwright/requirements.txt
+
+      - run: playwright install --with-deps chromium
 
       - name: get item price
         id: get-item-price
@@ -47,7 +49,8 @@ jobs:
           output_file=$(date --utc +data/%Y/%m/%d/%Y%m%d-%H%M%S).json
           install -d $(dirname ${output_file})
           #python get-items.py evidence/sources/local/items.csv | tee ${output_file}
-          python bs/price.py evidence/sources/local/items.csv > ${output_file}
+          #python bs/price.py evidence/sources/local/items.csv > ${output_file}
+          python playwright/scrape.py evidence/sources/local/items.csv > ${output_file}
           echo "output_file=${output_file}" >> $GITHUB_OUTPUT
         env:
           HTTP_PROXY: ${{ secrets.HTTP_PROXY }}

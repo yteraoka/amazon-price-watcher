@@ -37,7 +37,7 @@ jobs:
 
       - run: pip install -r playwright/requirements.txt
 
-      - run: playwright install
+      - run: playwright install --with-deps chromium
 
       - name: get item price
         id: get-item-price

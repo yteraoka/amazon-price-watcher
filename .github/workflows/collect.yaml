@@ -54,7 +54,9 @@ jobs:
           echo "output_file=${output_file}" >> $GITHUB_OUTPUT
         env:
           HTTP_PROXY: ${{ secrets.HTTP_PROXY }}
-          HTTPS_PROXY: ${{ secrets.HTTPS_PROXY }}
+          PROXY_USERNAME: ${{ secrets.PROXY_USERNAME }}
+          PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
+        #  HTTPS_PROXY: ${{ secrets.HTTPS_PROXY }}
         #  KEY: ${{ secrets.AMAZON_PA_API_KEY }}
         #  SECRET: ${{ secrets.AMAZON_PA_API_SECRET }}
         #  TAG: ${{ secrets.AMAZON_PA_API_TAG }}

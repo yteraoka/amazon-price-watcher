@@ -28,6 +28,14 @@ def read_file(path):
 
 
 def compare(latest, previous):
+    coupon = 0
+    if 'coupon' in latest:
+        latest['price'] = latest['price'] - latest['coupon']
+        coupon = latest['coupon']
+
+    if 'coupon' in previous:
+        previous['price'] = previous['price'] - previous['coupon']
+
     if latest['price'] < previous['price']:
         diff = previous['price'] - latest['price']
         percent = diff / previous['price']
@@ -36,7 +44,8 @@ def compare(latest, previous):
                      latest['name'],
                      latest['price'],
                      previous['price'],
-                     f"{percent:.2%} 値下がりしました")
+                     f"{percent:.2%} 値下がりしました",
+                     coupon)
     elif latest['price'] > previous['price']:
         # 値上がり
         diff = latest['price'] - previous['price']
@@ -45,9 +54,10 @@ def compare(latest, previous):
                      latest['name'],
                      latest['price'],
                      previous['price'],
-                     f"{percent:.2%} 値上がりしました")
+                     f"{percent:.2%} 値上がりしました",
+                     coupon)
 
-def send_message(asin, item_name, latest_price, previous_price, title):
+def send_message(asin, item_name, latest_price, previous_price, title, coupon):
     body = {}
     msg = {}
     diff = latest_price - previous_price
@@ -62,6 +72,8 @@ def send_message(asin, item_name, latest_price, previous_price, title):
     msg['fields'].append({"title": "価格変動", "value": diff_str, "short": False})
     msg['fields'].append({"title": "最新価格", "value": f"{latest_price:,}", "short": True})
     msg['fields'].append({"title": "前回の価格", "value": f"{previous_price:,}", "short": True})
+    if coupon > 0:
+        msg['fields'].append({"title": "クーポン", "value": f"{coupon:,}", "short": True})
     msg['fields'].append({"title": "商品URL", "value": 'https://www.amazon.co.jp/dp/' + asin, "short": False})
     msg['fields'].append({"title": "Evidence URL", "value": 'https://price-watcher.teraoka.me/asin/' + asin + '/', "short": False})
     body["attachments"] = [msg]

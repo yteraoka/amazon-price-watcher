@@ -3,6 +3,8 @@
 ```sql item
 SELECT name
      , image_url
+     , coupon
+     , coupon_text
   FROM local.prices
  WHERE asin = '${params.asin}'
  ORDER BY timestamp DESC
@@ -15,6 +17,7 @@ SELECT name
 ```sql prices
 SELECT timestamp
      , price
+     , price - COALESCE(coupon, 0) AS price_with_coupon
   FROM local.prices
  WHERE asin = '${params.asin}'
  ORDER BY timestamp
@@ -23,18 +26,20 @@ SELECT timestamp
 ```sql latest
 SELECT timestamp
      , price
+     , COALESCE(coupon, 0) AS coupon
+     , price - COALESCE(coupon, 0) AS price_with_coupon
   FROM local.prices
  WHERE asin = '${params.asin}'
  ORDER BY timestamp DESC
   LIMIT 1
 ```
 
-## <Value data={latest} fmt='JPY' column='price' /> (at <Value data={latest} column='timestamp' fmt='yyyy-mm-dd H:MM AM/PM' /> UTC)
+## <Value data={latest} fmt='JPY' column='price' /> (at <Value data={latest} column='timestamp' fmt='yyyy-mm-dd H:MM AM/PM' /> UTC) (クーポンあり <Value data={latest}  column='price_with_coupon' fmt='JPY' />)
 
 <LineChart
   data={prices}
   x=timestamp
-  y=price
+  y={["price", "price_with_coupon"]}
   yFmt=JPY0
   step=false
   markers=true

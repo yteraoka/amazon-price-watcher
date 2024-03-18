@@ -26,6 +26,9 @@ def find_coupon(bs):
     for div in divs:
         if div.get('data-csa-c-coupon'):
             coupon_text = div.text.strip()
+            m = re.search(r' (202\d.*から.*まで)', coupon_text)
+            if m is not None:
+                coupon_text = m.group(1)
             labels = bs.find_all('label')
             for label in labels:
                 if label.get('id') is not None:
@@ -78,6 +81,8 @@ def extract_price(asin, html):
             if div is None:
                 print('ERROR', file=sys.stderr)
                 print('no tp_price_block_total_price_ww found', file=sys.stderr)
+                return
+
     currency = 'JPY'
     price_span = div.find('span', class_='a-price-whole')
     if price_span is None:
@@ -137,10 +142,14 @@ def run(playwright: Playwright, asins):
     context = browser.new_context()
     page = context.new_page()
     for asin in asins:
-        page.goto('https://www.amazon.co.jp/dp/' + asin + '/')
+        url = 'https://www.amazon.co.jp/dp/' + asin + '/'
+        print(url, file=sys.stderr)
+        page.goto(url)
         page.wait_for_load_state()
-        #print(json.dumps(extract_price(asin, page.content()), ensure_ascii=False))
-        print(json.dumps(asdict(extract_price(asin, page.content())), ensure_ascii=False))
+        #print(json.dumps(asdict(extract_price(asin, page.content())), ensure_ascii=False))
+        item = extract_price(asin, page.content())
+        if item is not None:
+            print(json.dumps(asdict(item), ensure_ascii=False))
 
 def main():
     item_ids = []

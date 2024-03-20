@@ -44,7 +44,7 @@ def compare(latest, previous):
                      latest['name'],
                      latest['price'],
                      previous['price'],
-                     f"{percent:.2%} 値下がりしました",
+                     f"{percent:.2%} 値下がりしました⤵",
                      coupon)
     elif latest['price'] > previous['price']:
         # 値上がり
@@ -54,7 +54,7 @@ def compare(latest, previous):
                      latest['name'],
                      latest['price'],
                      previous['price'],
-                     f"{percent:.2%} 値上がりしました",
+                     f"{percent:.2%} 値上がりしました⤴️",
                      coupon)
 
 def send_message(asin, item_name, latest_price, previous_price, title, coupon):

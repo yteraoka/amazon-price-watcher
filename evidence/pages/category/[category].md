@@ -12,6 +12,7 @@ latest_prices AS (
   SELECT prices.asin
        , prices.name
        , prices.price
+       , prices.coupon
     FROM local.prices prices
          JOIN
          latest
@@ -21,6 +22,7 @@ SELECT items.asin
      , latest_prices.price
      , items.name
      , '/asin/' || items.asin || '/' AS link
+     , latest_prices.coupon
   FROM local.items items
        JOIN
        latest_prices
@@ -32,6 +34,7 @@ ORDER BY items.name
 <DataTable data={items_with_price} search=true link=link rows=50>
   <Column id=asin />
   <Column id=price fmt=num0 />
+  <Column id=coupon fmt=num0 />
   <Column id=name />
 </DataTable>
 

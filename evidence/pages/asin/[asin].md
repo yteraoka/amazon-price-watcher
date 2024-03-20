@@ -28,13 +28,42 @@ SELECT timestamp
      , price
      , COALESCE(coupon, 0) AS coupon
      , price - COALESCE(coupon, 0) AS price_with_coupon
+     , coupon_text
   FROM local.prices
  WHERE asin = '${params.asin}'
  ORDER BY timestamp DESC
   LIMIT 1
 ```
 
-## <Value data={latest} fmt='JPY' column='price' /> (at <Value data={latest} column='timestamp' fmt='yyyy-mm-dd H:MM AM/PM' /> UTC) (クーポンあり <Value data={latest}  column='price_with_coupon' fmt='JPY' />)
+```sql coupon
+SELECT coupon
+     , coupon_text
+  FROM local.prices
+ WHERE asin = '${params.asin}'
+   AND timestamp IN (
+         SELECT timestamp
+           FROM local.prices
+          WHERE asin = '${params.asin}'
+            AND coupon > 0
+          ORDER BY timestamp DESC
+           LIMIT 1
+  )
+```
+
+{#if coupon.length !== 0}
+## <Value data={latest}  column='price_with_coupon' fmt='JPY' /> (クーポン <Value data={coupon} column='coupon' fmt='JPY' />)
+
+<Alert status="info">
+<Value data={latest} column='coupon_text' /><br/>
+</Alert>
+
+<Value data={latest} fmt='JPY' column='price' /> (クーポンなし)
+
+{:else}
+## <Value data={latest} fmt='JPY' column='price' />
+{/if}
+
+(at <Value data={latest} column='timestamp' fmt='yyyy-mm-dd H:MM AM/PM' /> UTC)
 
 <LineChart
   data={prices}
@@ -82,6 +111,7 @@ latest_prices AS (
   SELECT prices.asin
        , prices.name
        , prices.price
+       , prices.coupon
     FROM local.prices prices
          JOIN
          latest
@@ -91,6 +121,7 @@ SELECT items.asin
      , latest_prices.price
      , items.name
      , '/asin/' || items.asin || '/' AS link
+     , coupon
   FROM local.items items
        JOIN
        latest_prices
@@ -103,6 +134,7 @@ ORDER BY items.name
 <DataTable data={items_with_price} search=true link=link rows=50 emptySet=pass emptyMessage=Empty>
   <Column id=asin />
   <Column id=price fmt=num0 />
+  <Column id=coupon fmt=num0 />
   <Column id=name />
 </DataTable>
 

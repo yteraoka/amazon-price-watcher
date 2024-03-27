@@ -140,6 +140,7 @@ def run(playwright: Playwright, asins):
     browser = playwright.chromium.launch(headless=True, proxy=proxy)
     #browser = playwright.chromium.launch(headless=True)
     context = browser.new_context()
+    context.set_default_timeout(120000)
     page = context.new_page()
     for asin in asins:
         url = 'https://www.amazon.co.jp/dp/' + asin + '/'

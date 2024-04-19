@@ -15,11 +15,12 @@ SELECT name
 
 
 ```sql prices
-SELECT timestamp
-     , price
-     , price - COALESCE(coupon, 0) AS price_with_coupon
+SELECT DATE_TRUNC('day', timestamp) AS timestamp
+     , min(price) AS price
+     , min(price - COALESCE(coupon, 0)) AS price_with_coupon
   FROM local.prices
  WHERE asin = '${params.asin}'
+ GROUP BY DATE_TRUNC('day', timestamp)
  ORDER BY timestamp
 ```
 

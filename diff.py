@@ -37,25 +37,27 @@ def compare(latest, previous):
         previous['price'] = previous['price'] - previous['coupon']
 
     if latest['price'] < previous['price']:
+        # 値下がり
         diff = previous['price'] - latest['price']
         percent = diff / previous['price']
-        # 値下がり
-        send_message(latest['asin'],
-                     latest['name'],
-                     latest['price'],
-                     previous['price'],
-                     f"{percent:.2%} 値下がりしました⤵",
-                     coupon)
+        if percent >= 5:
+            send_message(latest['asin'],
+                         latest['name'],
+                         latest['price'],
+                         previous['price'],
+                         f"{percent:.2%} 値下がりしました⤵",
+                         coupon)
     elif latest['price'] > previous['price']:
         # 値上がり
         diff = latest['price'] - previous['price']
         percent = diff / previous['price']
-        send_message(latest['asin'],
-                     latest['name'],
-                     latest['price'],
-                     previous['price'],
-                     f"{percent:.2%} 値上がりしました⤴️",
-                     coupon)
+        if percent >= 5:
+            send_message(latest['asin'],
+                         latest['name'],
+                         latest['price'],
+                         previous['price'],
+                         f"{percent:.2%} 値上がりしました⤴️",
+                         coupon)
 
 def send_message(asin, item_name, latest_price, previous_price, title, coupon):
     body = {}

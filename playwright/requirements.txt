@@ -3,7 +3,7 @@ certifi==2024.2.2
 charset-normalizer==3.3.2
 greenlet==3.0.3
 idna==3.6
-playwright==1.42.0
+playwright==1.43.0
 pyee==11.1.0
 requests==2.31.0
 soupsieve==2.5

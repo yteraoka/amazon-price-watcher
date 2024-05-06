@@ -40,7 +40,7 @@ def compare(latest, previous):
         # 値下がり
         diff = previous['price'] - latest['price']
         percent = diff / previous['price']
-        if percent >= 5:
+        if percent >= 0.05:
             send_message(latest['asin'],
                          latest['name'],
                          latest['price'],
@@ -51,7 +51,7 @@ def compare(latest, previous):
         # 値上がり
         diff = latest['price'] - previous['price']
         percent = diff / previous['price']
-        if percent >= 5:
+        if percent >= 0.05:
             send_message(latest['asin'],
                          latest['name'],
                          latest['price'],

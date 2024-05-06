@@ -2,7 +2,7 @@ beautifulsoup4==4.12.3
 certifi==2024.2.2
 charset-normalizer==3.3.2
 greenlet==3.0.3
-idna==3.6
+idna==3.7
 playwright==1.43.0
 pyee==11.1.0
 requests==2.31.0

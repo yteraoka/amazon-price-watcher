@@ -7,3 +7,5 @@ static/data
 *.options.yaml
 .vscode/settings.json
 sources/local/*.csv
+.env
+.evidence/meta

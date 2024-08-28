@@ -68,7 +68,7 @@ def send_message(asin, item_name, latest_price, previous_price, title, coupon):
     else:
         diff_str = f"{diff:,}"
     msg['title'] = title
-    msg['text'] = item_name
+    msg['text'] = title + "\n" + item_name
     msg['fields'] = []
     msg['author_name'] = "Amazon Price Watcher"
     msg['fields'].append({"title": "価格変動", "value": diff_str, "short": False})

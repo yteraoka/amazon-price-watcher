@@ -6,6 +6,6 @@ idna==3.7
 playwright==1.43.0
 pyee==11.1.0
 requests==2.32.3
-soupsieve==2.5
+soupsieve==2.6
 typing_extensions==4.10.0
 urllib3==2.2.1

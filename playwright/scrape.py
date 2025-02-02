@@ -62,7 +62,6 @@ def extract_price(asin, html):
     title_id = bs.find(id='title')
     if title_id is None:
         print('No title', file=sys.stderr)
-        print(res.text, file=sys.stderr)
     title = title_id.text.strip()
     landing_image = bs.find('img', id='landingImage')
     if landing_image is not None:

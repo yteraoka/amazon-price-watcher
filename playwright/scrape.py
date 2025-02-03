@@ -144,8 +144,10 @@ def run(playwright: Playwright, asins):
     for asin in asins:
         url = 'https://www.amazon.co.jp/dp/' + asin + '/'
         print(url, file=sys.stderr)
-        page.goto(url)
+        response = page.goto(url)
         page.wait_for_load_state()
+        if response.status == 404:
+            continue
         #print(json.dumps(asdict(extract_price(asin, page.content())), ensure_ascii=False))
         item = extract_price(asin, page.content())
         if item is not None:

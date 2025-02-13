@@ -1,4 +1,4 @@
-beautifulsoup4==4.12.3
+beautifulsoup4==4.13.3
 certifi==2025.1.31
 charset-normalizer==3.4.1
 greenlet==3.1.1

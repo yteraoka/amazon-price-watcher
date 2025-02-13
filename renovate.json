@@ -12,7 +12,12 @@
         "dev-dependencies",
         "dev"
       ],
-      "addLabels": ["devDependencies"],
+      "addLabels": ["devDependencies"]
+    },
+    {
+      "groupName": "evidence",
+      "matchPackageNames": ["/^@evidence-dev/"],
+      "addLabels": ["evidence"]
     }
   ]
 }

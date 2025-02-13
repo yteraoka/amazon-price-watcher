@@ -18,6 +18,21 @@
       "groupName": "evidence",
       "matchPackageNames": ["/^@evidence-dev/"],
       "addLabels": ["evidence"]
+    },
+    {
+      "groupName": "root-python",
+      "matchFileNames": ["requirements.txt"],
+      "addLabels": ["python"]
+    },
+    {
+      "groupName": "playwright-python",
+      "matchFileNames": ["playwright/requirements.txt"],
+      "addLabels": ["python"]
+    },
+    {
+      "groupName": "bs-python",
+      "matchFileNames": ["bs/requirements.txt"],
+      "addLabels": ["python"]
     }
   ]
 }

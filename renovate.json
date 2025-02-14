@@ -16,7 +16,7 @@
     },
     {
       "groupName": "evidence",
-      "matchPackageNames": ["/^@evidence-dev/"],
+      "matchFileNames": ["evidence/package.json", "evidence/package-lock.json"],
       "addLabels": ["evidence"]
     },
     {

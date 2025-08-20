@@ -21,4 +21,5 @@ jobs:
       - run: ip a s
       - run: ip r
       - run: sudo wg
+      - run: ping 10.220.182.1
       - run: curl -vvv --connect-timeout 5 -m 10 http://192.168.210.107/

@@ -18,6 +18,7 @@ jobs:
       - run: sudo wg set wg0 listen-port 48123 private-key privatekey peer /lLsdb8Rco38DbSxtt2SiMI/uxeTkSrJY+CpkuzGJkE= preshared-key presharedkey allowed-ips 0.0.0.0/0 endpoint decoboco.tplinkdns.com:51820
       #- run: sudo wg set wg0 private-key privatekey peer /lLsdb8Rco38DbSxtt2SiMI/uxeTkSrJY+CpkuzGJkE= preshared-key presharedkey allowed-ips 0.0.0.0/0 endpoint decoboco.tplinkdns.com:51820
       - run: sudo ip link set up dev wg0
+      - run: sudo ip route add 192.168.210.0/24 dev wg0
       - run: ip a s
       - run: ip r
       - run: sudo wg

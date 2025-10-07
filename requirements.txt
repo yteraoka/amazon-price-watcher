@@ -1,4 +1,4 @@
-certifi==2024.2.2
+certifi==2025.10.5
 python-amazon-paapi==5.0.1
 python-dateutil==2.9.0.post0
 six==1.16.0

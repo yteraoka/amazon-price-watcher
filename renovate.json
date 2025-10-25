@@ -4,6 +4,7 @@
     "config:recommended"
   ],
   "addLabels": ["renovate"],
+  "ignorePaths": ["evidence/**"],
   "packageRules": [
     {
       "groupName": "dev-dependencies",

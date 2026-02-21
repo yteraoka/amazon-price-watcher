@@ -1,10 +1,10 @@
 beautifulsoup4==4.12.3
-certifi==2025.1.31
+certifi==2026.1.4
 charset-normalizer==3.4.1
 greenlet==3.1.1
 idna==3.10
 playwright==1.49.1
-pyee==12.0.0
+pyee==13.0.1
 requests==2.32.3
 soupsieve==2.6
 typing_extensions==4.12.2

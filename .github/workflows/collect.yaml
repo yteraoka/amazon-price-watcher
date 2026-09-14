@@ -5,6 +5,7 @@ on:
     paths:
       - 'evidence/sources/local/items.csv'
       - 'playwright/**'
+      - '.github/workflows/collect.yaml'
   workflow_dispatch:
     inputs:
       disable_collect:

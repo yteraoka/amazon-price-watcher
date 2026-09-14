@@ -2,6 +2,9 @@ name: collect data and deploy
 
 on:
   pull_request:
+    paths:
+      - 'evidence/sources/local/items.csv'
+      - 'playwright/**'
   workflow_dispatch:
     inputs:
       disable_collect:

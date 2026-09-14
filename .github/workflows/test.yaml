@@ -1,0 +1,72 @@
+name: test
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    #runs-on: self-hosted
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.11'
+
+      - run: pip install -r playwright/requirements.txt
+
+      - run: playwright install --with-deps chromium
+
+      - run: sudo apt install wireguard
+
+      - name: Setup VPN
+        run: |
+          echo "${{ secrets.WIREGUARD_PRIVATE_KEY }}" > privatekey
+          echo "${{ secrets.WIREGUARD_PRESHARED_KEY }}" > presharedkey
+          sudo ip link add dev wg0 type wireguard
+          sudo ip address add dev wg0 10.220.182.9/24 peer 10.220.182.1/24
+          sudo wg set wg0 listen-port 48123 private-key privatekey peer /lLsdb8Rco38DbSxtt2SiMI/uxeTkSrJY+CpkuzGJkE= preshared-key presharedkey allowed-ips 0.0.0.0/0 endpoint ${{ secrets.WIREGUARD_ENDPOINT }}
+          sudo ip link set up dev wg0
+          sudo ip route add 192.168.210.0/24 dev wg0
+          ping -w 3 192.168.210.107
+
+      - name: get item price
+        id: get-item-price
+        run: |
+          set -o pipefail
+          output_file=$(date --utc +data/%Y/%m/%d/%Y%m%d-%H%M%S).json
+          install -d $(dirname ${output_file})
+          python playwright/scrape.py --test evidence/sources/local/items.csv > ${output_file}
+          echo "output_file=${output_file}" >> $GITHUB_OUTPUT
+        env:
+          HTTP_PROXY: ${{ secrets.HTTP_PROXY }}
+          PROXY_USERNAME: ${{ secrets.PROXY_USERNAME }}
+          PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
+
+      - name: json2csv
+        run: |
+          bash json2csv.sh
+
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: '20.19'
+
+      - run: npm ci
+        working-directory: evidence
+
+      - run: npm run sources
+        working-directory: evidence
+
+      - run: npm run build
+        working-directory: evidence

@@ -1,4 +1,5 @@
 from playwright.sync_api import Playwright, sync_playwright, expect
+import argparse
 import os
 import re
 import sys
@@ -154,15 +155,25 @@ def run(playwright: Playwright, asins):
             print(json.dumps(asdict(item), ensure_ascii=False))
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('items_csv')
+    parser.add_argument('-t', '--test', action='store_true',
+                        help='test mode: process only one item and exit')
+    args = parser.parse_args()
+
     item_ids = []
 
-    with open(sys.argv[1]) as f:
+    with open(args.items_csv) as f:
         reader = csv.DictReader(f)
         for row in reader:
             if row['enabled'] == "true":
             #if row['asin'] == "B0CHVXW6FV":
             #if row['asin'] == "B0B6ZQJXW8":
                 item_ids.append(row['asin'])
+
+    if args.test:
+        item_ids = item_ids[:1]
+        print(f'test mode: {item_ids}', file=sys.stderr)
 
     #asins = ['B0CJFQ7RTX','B08P6ZSXWZ','B09HBCY5BF','B0BXSKY533','B0C5CBV6L3','B0C5CBV6L3']
     #item_ids = ['B0CJFQ7RTX']

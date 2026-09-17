@@ -31,6 +31,12 @@
       "addLabels": ["python"]
     },
     {
+      "description": "pyee is a transitive dependency of playwright; playwright 1.63 requires pyee>=13,<14. Keep it in range so pip can resolve playwright/requirements.txt.",
+      "matchFileNames": ["playwright/requirements.txt"],
+      "matchPackageNames": ["pyee"],
+      "allowedVersions": "<14"
+    },
+    {
       "groupName": "bs-python",
       "matchFileNames": ["bs/requirements.txt"],
       "addLabels": ["python"]
